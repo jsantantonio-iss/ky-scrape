@@ -157,7 +157,7 @@ def run_agents(main_logger=None, limit=None, use_tor=False, files=None):
                     try:
                         phone_df = pd.read_html(StringIO(str(phone_div.next_sibling)))[0]
                         phone_df = phone_df[['Type', 'Phone']].rename(columns={'Type': 'phonetype'})
-                        phone_df = phone_df[phone_df['Phone'].str.strip().astype(bool)]
+                        phone_df = phone_df[phone_df['Phone'].fillna('').astype(str).str.strip().astype(bool)]
                         if not phone_df.empty:
                             agent_df['phonetype'] = phone_df['phonetype'].values[0]
                             agent_df['Phone'] = phone_df['Phone'].values[0]
@@ -171,7 +171,7 @@ def run_agents(main_logger=None, limit=None, use_tor=False, files=None):
                         email_df = pd.read_html(StringIO(str(email_div.next_sibling)))[0]
                         email_df = email_df[email_df['Type'] != 'Internet'][['Type', 'Address']]
                         email_df = email_df.rename(columns={'Type': 'emailtype', 'Address': 'email'})
-                        email_df = email_df[email_df['email'].str.strip().astype(bool)]
+                        email_df = email_df[email_df['email'].fillna('').astype(str).str.strip().astype(bool)]
                         if not email_df.empty:
                             agent_df['emailtype'] = email_df['emailtype'].values[0]
                             agent_df['email'] = email_df['email'].values[0]
